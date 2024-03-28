@@ -1,0 +1,64 @@
+##### 流程配置 #####
+pipeline:
+  pipeline:
+    - prepare
+    - ppo
+  logging_level: info
+  enable_flops_profiler: false
+
+##### 细节配置（可选） #####
+logger:
+  wandb_project: "PPO_Pipeline"
+  wandb_name: ""
+  wandb_group: ""
+  wandb_team: ""
+
+generation:
+  top_k: 0
+  top_p: 0.85
+  temperature: 0.85
+  repetition_penalty: 1.0
+  max_new_tokens: 1024
+
+ppo:
+  trainer:
+    actor_lr: 1.0e-6
+    critic_lr: 5.0e-05
+    num_episodes: 2048
+    total_steps: 4096
+    max_epoch_per_update: 2
+    policy_train_batch_size: 1
+    kl_coef: 0.0
+    val_every_n_episode: 5
+    val_size_per_task: 4
+    critic_from_sft: true
+  experience:
+    experience_batch_size: 32
+    sample_batch_size: 32
+    generate_minibatch_size: 32
+    policy_minibatch_size: 8
+    rm_minibatch_size: 2
+    buffer_limit_size: 512
+    replay_buffer_cpu_offload: true
+    sample_replay_buffer: false
+  ppo_details:
+    eps_clip: 0.1
+    drop_approx_kl: 1.0e+3
+    value_clip: 0.2
+    gamma: 0.99
+    lam: 0.95
+    enable_reward_scaling: false
+    enable_constrain_actor: false
+    update_constrain_actor_interval: 0
+    constrain_actor_kl_coef: 0.01
+    target_constrain_actor_kl: null
+  ppopp_details:
+    ppopp_beta: 0.5
+    ppopp_beta_decay: 1.0
+    ppopp_rate: 0.9
+    ppopp_rate_decay: 0.98
+    use_guide_action: false
+
+
+
+

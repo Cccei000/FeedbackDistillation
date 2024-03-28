@@ -1,0 +1,26 @@
+{
+    "labeled": [
+        {
+            "path": "/cognitive_comp/songzhuoyang/rm_datasets/",
+            "number": "all"
+        }
+    ],
+    "adversarial": [
+        {
+            "path":"/cognitive_comp/liangyuxin/datasets/RM/predict_test/construct_adversarial_base_13b.json",
+            "number": 500
+        }
+    ],
+    "construct_compare": [
+        {
+            "name":"language_mismatch_partial",
+            "path": "/cognitive_comp/liangyuxin/datasets/compare_data/en_zh_mix/zh_en_mix.json",
+            "number": 2000
+        },
+        {
+            "name":"poetry",
+            "path": "/cognitive_comp/liangyuxin/datasets/compare_data/poetry/gushi_compare_1.json",
+            "number": 1000
+        }
+    ]
+}

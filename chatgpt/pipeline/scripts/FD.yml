@@ -1,0 +1,35 @@
+
+pipeline:
+  pipeline:
+    - FD
+  logging_level: info
+  enable_flops_profiler: false
+
+logger:
+  wandb_project: "Feedback-distillation"
+  wandb_group: ""
+  wandb_name: ""
+  wandb_team: ""
+
+FD:
+  experience:
+    actor_train_batch_size: 2       
+    experience_batch_size: 128       
+    actor_mini_batch_size: 8        
+    reflector_mini_batch_size: 8      
+    sample_batch_size: 128      
+    buffer_limit_size: 512    
+    replay_buffer_cpu_offload: True    
+    sample_replay_buffer: False   
+  loss:
+    divergence_type: "JSD"    
+    JSD_coef: 0.5
+    GKD_coef: 1.0
+    KD_temperature: 1.0
+  trainer:
+    actor_lr: 1.0e-06
+    max_epochs: 1
+    num_episodes: 512
+    update_timesteps: 1
+    max_timesteps: 1
+    val_every_n_episode: 5

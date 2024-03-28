@@ -1,0 +1,58 @@
+##### 流程配置 #####
+pipeline:
+  # policy_model_type: "llama_13B"
+  reward_model_type: "llama_13B"
+  pipeline:
+    # - prepare
+    - reward_modeling
+  granularity: "token"
+  dataset_path: "/cognitive_comp/songzhuoyang/processed_data/pipeline_dev_dataset_full.jsonl"
+  workspace_path: "/cognitive_comp/liangyuxin/workspace/pipeline"
+  logging_level: info ### debug, info, warning, error
+  gpus: 4
+  
+##### 细节配置（可选） #####
+logger:
+  wandb_project: "PPO_LLAMA13B_TEST"
+  wandb_name: "pipeline"
+  wandb_group: ""
+  wandb_team: "yukawa"
+
+data:
+  prefix: 
+    model: "<bot>:"
+    human: "<human>:"
+  multiturn_seperator: "\n"  
+
+megatron:
+  deepspeed_stage: 2
+  offload_optimizer: true
+  tensor_model_parallel_size: 4
+  pipe_model_parallel_size: 1
+  seed: 42
+
+generation:
+  top_p: 0.85
+  temperature: 1.0
+  max_new_tokens: 1024
+
+reward_modeling:
+  from_sft: true
+  learning_rate: 4.0e-06
+  val_check_interval: 0.005
+  rm_batch_size: 2
+  max_epochs: 2
+  activation_checkpointing: true
+  data_split_ratio:
+    train: 90
+    eval: 5
+    test: 5
+  save_splited_dataset: true
+
+ppo:
+  trainer:
+    num_episodes: 512
+    total_steps: 512
+    actor_lr: 2.0e-06
+    critic_lr: 1.0e-05
+

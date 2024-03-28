@@ -1,0 +1,37 @@
+##### 流程配置 #####
+pipeline:
+  policy_model_type: "llama_13B"
+  reward_model_type: "llama_13B"
+  pipeline:
+    - prepare
+    - ppo
+  rm_granularity: "sample"
+  actor_granularity: "step"
+  dataset_path: "/cognitive_comp/shenjunyi/g/datasets/prompt/ppo_dataset_writing_qa_0718.jsonl"
+  workspace_path: null # TODO: 替换为自己的目录
+  logging_path: null # TODO: 替换为自己的目录
+  logging_level: debug ### debug, info, warning, error
+  enable_flops_profiler: false
+  gpus: 4
+
+##### 细节配置（可选） #####
+logger:
+  wandb_project: "PPO_LLAMA2_13B_Pipeline_debug"
+  wandb_name: "sample+step-mp4-guide-multi-rm0817"
+  wandb_group: ""
+  wandb_team: "yukawa"
+
+policy_model:
+  policy_model_path: "/cognitive_comp/pankunhao/code/FastChat/model_ckpt/writing_0803/checkpoint-339"
+  policy_max_seq_len: 2048
+
+reward_model:
+  reward_model_path: "/cognitive_comp/liangyuxin/workspace/chatgpt/13B_RM/ckpt/RM_LLAMA_13B_0725_token/global_step7202_hf"
+  rm_max_seq_len: 2048
+
+ppo:
+  trainer:
+    policy_train_batch_size: 2
+  ppo_details:
+    enabling_tot: true
+    best_of_n_times: 2

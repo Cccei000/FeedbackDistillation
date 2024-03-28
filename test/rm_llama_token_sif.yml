@@ -1,0 +1,56 @@
+##### 流程配置 #####
+pipeline:
+  reward_model_type: "llama2_13B"
+  pipeline:
+    - prepare
+    - reward_modeling
+  dataset_path: "/opt/dataset/all_data.jsonl"
+  workspace_path: "/opt/workspace/"
+  logging_level: info ### debug, info, warning, error
+  gpus: 8
+  rm_granularity: "token"
+  
+##### 细节配置（可选） #####
+logger:
+  wandb_project: "RM_LLAMA2_13B_Pipeline_Test"
+  wandb_name: "rm-token"
+  wandb_group: ""
+  wandb_team: "yukawa"
+
+policy_model:
+  policy_model_path: "/opt/policy"
+  policy_model_type: "llama2_13B"
+  policy_tokenizer_path: "/opt/tokenizer"
+
+reward_model:
+  reward_model_type: "llama2_13B"
+  rm_tokenizer_path: "/opt/tokenizer"
+  reward_model_path: null
+  rm_max_seq_len: 4096
+
+reward_modeling:
+  from_sft: true
+  learning_rate: 4.0e-06
+  val_check_interval: 0.05
+  rm_batch_size: 2
+  max_epochs: 1
+  activation_checkpointing: true
+  data_split_ratio:
+    train: 0.9
+    eval: 0.05
+    test: 0.05
+  save_splited_dataset: true
+
+megatron:
+  deepspeed_stage: 2
+  offload_optimizer: false
+  tensor_model_parallel_size: 4
+  pipe_model_parallel_size: 1
+  rm_precision: bf16
+  gradient_accumulation_steps: 4
+
+data:
+  prefix: 
+    model: "\n<Assistant Round-{round_number}>:"
+    human: "<Human Round-{round_number}>:"
+  multiturn_seperator: ""  

@@ -1,0 +1,126 @@
+##### 细节配置 #####
+
+logger:
+  wandb_group: ""
+  wandb_name: ""
+  wandb_project: Fengshen-HumanFeedback
+  wandb_team: null
+
+defaults:
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1.0e-05
+  learning_rate: 1.0e-06
+  min_learning_rate: 1.0e-07
+  lr_decay_ratio: 1.0
+  lr_decay_steps: 0
+  warmup_max_lr: 0.0001
+  warmup_min_lr: 1.0e-09
+  warmup_ratio: 0.01
+  warmup_steps: 0
+  weight_decay: 0.1
+  scheduler_type: cosine
+
+megatron:
+  seed: 42
+  deepspeed_stage: 2
+  offload_optimizer: true
+  policy_precision: bf16
+  rm_precision: fp16
+  tensor_model_parallel_size: 4
+  pipe_model_parallel_size: 1
+  lora_rank: 0
+  gradient_accumulation_steps: 8
+
+data:
+  dataset_path: null
+  workspace_path: null
+  prefix: 
+    model: "<bot>:"
+    human: "<human>:"
+  multiturn_seperator: "\n"  
+
+policy_model:
+  policy_model_type: "llama_13B"
+  policy_tokenizer_path: null
+  policy_model_path: null
+  policy_max_seq_len: 1900
+
+reward_model:
+  reward_model_type: "llama_13B"
+  rm_tokenizer_path: null
+  reward_model_path: null
+  rm_max_seq_len: 2048
+  granularity: "token"
+
+generation:
+  top_k: 0
+  top_p: 0.85
+  temperature: 1.0
+  repetition_penalty: 1.0
+  max_new_tokens: 1024
+
+reward_modeling:
+  num_workers: 2
+  learning_rate: 4.0e-06
+  total_steps: null
+  rm_batch_size: 1
+  val_check_interval: 0.05
+  max_epochs: 2
+  activation_checkpointing: false
+  data_split_ratio:
+    train: 6
+    eval: 2
+    test: 2
+  save_splited_dataset: true
+  scheduler_type: polynomial
+
+ppo:
+  experience:
+    experience_batch_size: 8
+    generate_minibatch_size: 8
+    policy_minibatch_size: 8
+    rm_minibatch_size: 2
+    sample_batch_size: 8
+    buffer_limit_size: 512
+    replay_buffer_cpu_offload: true
+    sample_replay_buffer: false
+  ppo_details:
+    eps_clip: 0.2
+    value_clip: 0.2
+    gamma: 0.99
+    lam: 0.95
+    enable_gae: true
+    enable_token_reward: false
+    enable_token_level_loss: false
+    enable_step_level: false
+    enable_step_ppo: true
+    enable_reward_scaling: true
+    step_level_reward: true
+    min_step_lengths: 10
+    enabling_bon: true
+    best_of_n_times: 2
+  ppopp_details:
+    ppopp_beta: 0.5
+    ppopp_beta_decay: 1.0
+    ppopp_rate: 0.9
+    ppopp_rate_decay: 0.98
+    use_guide_action: false
+  trainer:
+    num_workers: 2
+    num_episodes: 512
+    total_steps: 512
+    max_timesteps: 1
+    update_timesteps: 1
+    actor_lr: 1.0e-06
+    critic_lr: 1.0e-06
+    max_epoch_per_update: 2
+    policy_train_batch_size: 2
+    clip_grad: true
+    kl_coef: 0.0
+    entropy_loss_coef: 0.01
+    entropy_loss_decay_rate: 1.0
+    do_validation: true
+    val_every_n_episode: 5
+    val_size_per_task: 1
+

@@ -1,0 +1,39 @@
+##### 流程配置 #####
+pipeline:
+  policy_model_type: "llama_13B"
+  reward_model_type: "llama_13B"
+  pipeline:
+    - reward_modeling
+    - ppo
+  granularity: "token"
+  dataset_path: "/cognitive_comp/songzhuoyang/processed_data/pipeline_dev_dataset.jsonl"
+  workspace_path: "/cognitive_comp/songzhuoyang/workspace/pipeline"
+  logging_level: info ### debug, info, warning, error
+  gpus: 4
+  
+##### 细节配置（可选） #####
+logger:
+  wandb_project: "PPO_LLAMA13B_Writing_Safty_token_level"
+  wandb_name: "0802_1521-guide-tkloss"
+  wandb_group: ""
+  wandb_team: "yukawa"
+
+megatron:
+  deepspeed_stage: 2
+  offload_optimizer: true
+  tensor_model_parallel_size: 4
+  pipe_model_parallel_size: 1
+  seed: 42
+
+generation:
+  top_p: 0.85
+  temperature: 1.0
+  max_new_tokens: 1024
+
+ppo:
+  trainer:
+    num_episodes: 512
+    total_steps: 512
+    actor_lr: 2.0e-06
+    critic_lr: 1.0e-05
+

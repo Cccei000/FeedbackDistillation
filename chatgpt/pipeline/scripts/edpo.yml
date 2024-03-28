@@ -1,0 +1,83 @@
+##### 流程配置 #####
+pipeline:
+  pipeline:
+    - prepare
+    - edpo
+  prepare_list:
+    - policy
+  actor_granularity: "sample"
+  logging_level: info
+  enable_flops_profiler: false
+
+##### 细节配置（可选） #####
+
+logger:
+  wandb_project: "EDPO_Pipeline"
+  wandb_name: ""
+  wandb_group: ""
+  wandb_team: ""
+
+generation:
+  top_k: 0
+  top_p: 0.85
+  temperature: 0.85
+  repetition_penalty: 1.0
+  max_new_tokens: 1024
+
+reward_modeling:
+  num_workers: 2
+  learning_rate: 4.0e-06
+  total_steps: null
+  rm_batch_size: 1
+  val_check_interval: 0.05
+  max_epochs: 2
+  activation_checkpointing: false
+  data_split_ratio:
+    train: 6
+    eval: 2
+    test: 2
+  save_splited_dataset: true
+  scheduler_type: polynomial
+
+generation_search:
+  gs_gen_batch_size: 1
+  gs_gen_repeat_times: 2
+  gs_breadth: 2
+  gs_iterations: 2
+  enabling_tot: false
+  gs_eval_batch_size: 1
+
+edpo:
+  experience:
+    experience_batch_size: 128
+    generate_minibatch_size: 32
+    policy_minibatch_size: 8
+    rm_minibatch_size: 2
+    sample_batch_size: 128
+    buffer_limit_size: 512
+    replay_buffer_cpu_offload: true
+    sample_replay_buffer: false
+  trainer:
+    num_workers: 2
+    num_episodes: 512
+    total_steps: 512
+    max_timesteps: 1
+    update_timesteps: 1
+    actor_lr: 2.0e-06
+    critic_lr: 1.0e-05
+    max_epoch_per_update: 2
+    policy_train_batch_size: 2
+    clip_grad: true
+    do_validation: true
+    val_every_n_episode: 5
+    val_size_per_task: 16
+    activation_checkpointing: false
+  edpo_details:
+    equalizing_preferences:     false                                                                                 
+    max_n_preferences:          3                                                                                     
+    dpo_beta:                   0.5                                                                                   
+    has_ref_model_constraints:  true                                                                                  
+    edpo_preference_batch_size: 1                                                                                     
+    ignore_ref_first_n_steps:   -1                                                                                    
+    save_every_n_episode:       5                                                                                                 
+    sample_replay_buffer:       false 

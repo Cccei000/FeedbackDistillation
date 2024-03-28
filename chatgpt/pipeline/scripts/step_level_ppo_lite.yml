@@ -1,0 +1,38 @@
+##### 流程配置 #####
+pipeline:
+  policy_model_type: "llama_13B"
+  reward_model_type: "llama_13B"
+  pipeline:
+    - ppo
+  granularity: "step_mix_token"
+  dataset_path: "/cognitive_comp/shenjunyi/g/datasets/prompt/ppo_dataset_writing_qa_0718.jsonl"
+  workspace_path: "/cognitive_comp/shenjunyi/g/chatgpt/chatgpt/workspace"
+  logging_level: info ### debug, info, warning, error
+  gpus: 4
+  
+##### 细节配置（可选） #####
+logger:
+  wandb_project: "STEP_PPO_Ziya-Writing-13B-0706_RM13B_writing"
+  wandb_name: "0828_test"
+  wandb_group: ""
+  wandb_team: "yukawa"
+
+megatron:
+  deepspeed_stage: 2
+  offload_optimizer: true
+  tensor_model_parallel_size: 4
+  pipe_model_parallel_size: 1
+  seed: 42
+
+generation:
+  top_p: 0.85
+  temperature: 1.0
+  max_new_tokens: 1024
+
+ppo:
+  trainer:
+    num_episodes: 512
+    total_steps: 512
+    actor_lr: 2.0e-06
+    critic_lr: 1.0e-05
+

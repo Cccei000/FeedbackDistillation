@@ -1,0 +1,10 @@
+##### 分布式训练配置 #####
+## 8及以上GPU，采用mp8不offload策略
+megatron:
+  deepspeed_stage: 1
+  offload_optimizer: false
+  policy_precision: bf16
+  rm_precision: fp16
+  seed: 42
+  gradient_accumulation_steps: 8
+  enable_hybrid_engine: false
